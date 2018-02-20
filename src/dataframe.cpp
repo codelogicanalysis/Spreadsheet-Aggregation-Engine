@@ -3,14 +3,14 @@
 //PRECONDITIONS:
 //1 - DATA IS A SQUARE MATRIX
 Dataframe::Dataframe(std::string filename) {
-    std::ifstream file(filename);
-    if (!file) throw std::runtime_error("File '"+filename+"' did not open successfully. Check the relative file path or file contents.");
+	std::ifstream file(filename);
+	if (!file) throw std::runtime_error("File '"+filename+"' did not open successfully. Check the relative file path or file contents.");
+	
+	std::string line;
+	std::getline(file, line);
 
-    std::string line;
-    std::getline(file, line);
-
-    std::vector<std::string> header_line; //!< Vector of strings to store title row
-    header = header_line = Parser::parse_csv_line(line);
+	std::vector<std::string> header_line; //!< Vector of strings to store title row
+	header = header_line = Parser::parse_csv_line(line);
 
 	for(size_t i = 0; i < header_line.size(); i++) {
 		data[header_line[i]] = std::vector<std::string>();
@@ -49,18 +49,18 @@ std::vector<std::string> Dataframe::get_column(std::string column_name) {
 }
 
 void Dataframe::print() {
-    std::vector<std::string> columns = column_names();
+	std::vector<std::string> columns = column_names();
+    	
+	if(!column_count) std::cout << "Dataframe is empty\n";
     
-    if(!column_count) std::cout << "Dataframe is empty\n";
-    
-    for(size_t i = 0; i < column_count; i++){
-        std::cout << columns[i] << " ,"[i != column_count - 1] << " \n"[i == column_count - 1];
+	for(size_t i = 0; i < column_count; i++){	
+		std::cout << columns[i] << " ,"[i != column_count - 1] << " \n"[i == column_count - 1];
 		//Explanation of the above: " \n" is a char*, " \n"[0] is ' ' and " \n"[1] is '\n'
-    }
+	}
     
-    for(size_t row = 0; row < row_count; row++) {
-        for(size_t col = 0; col < column_count; col++){
+	for(size_t row = 0; row < row_count; row++) {
+		for(size_t col = 0; col < column_count; col++){
 			std::cout << data[columns[col]][row] << " ,"[col != column_count - 1] << " \n"[col == column_count - 1];
-        }
-    }
+		}
+	}
 }
