@@ -1,83 +1,66 @@
 #include "dataframe.h"
 
+//PRECONDITIONS:
+//1 - DATA IS A SQUARE MATRIX
 Dataframe::Dataframe(std::string filename) {
     std::ifstream file(filename);
     if (!file) throw std::runtime_error("File '"+filename+"' did not open successfully. Check the relative file path or file contents.");
-    
 
     std::string line;
     std::getline(file, line);
 
     std::vector<std::string> header_line; //!< Vector of strings to store title row
-    header_line = Parser::parse_csv_line(line);
+    header = header_line = Parser::parse_csv_line(line);
 
-    std::vector<std::vector<std::string>> columns; //!< Vector of all the columns in the spreadsheet
-
-    // Initialize columns first order vector
-    std::vector<std::string> temp_line; //!< Using this to initialize columns' high level vector
-    std::getline(file, line);
-    temp_line = Parser::parse_csv_line(line);
-
-    for(int i = 0; i < header_line.size(); i++){
-    	std::vector<std::string> temp_vector;
-    	temp_vector.push_back(temp_line[i]);
-    	columns.push_back(temp_vector);
-    }
-
-    while(std::getline(file,line)){
-
-    	std::vector<std::string> current_line = Parser::parse_csv_line(line);
-    	for(int i = 0; i < current_line.size(); i++){
-    		columns[i].push_back(current_line[i]);
-    		// std::cout<<current_line[1]<<std::endl;
-    	}
-    }
-
-	for(int i = 0; i<header_line.size(); i++){
-		data.emplace(header_line[i], columns[i]);
-		// std::cout<<header_line[i];
-		// std::cout<<columns[i][1]<<std::endl;
-
+	for(size_t i = 0; i < header_line.size(); i++) {
+		data[header_line[i]] = std::vector<std::string>();
 	}
+
+	while(std::getline(file, line)) {
+		std::vector<std::string> current_line = Parser::parse_csv_line(line);
+		for(size_t i = 0; i < current_line.size(); i++) {
+			data[header_line[i]].push_back(current_line[i]);
+		}
+	}
+	
+	column_count = header_line.size();
+	row_count = data[header_line[0]].size();
 }
 
-std::vector<std::string> Dataframe::columnNames() {
-	std::vector<std::string> retVal;
-	for(auto & element : data) {
-		retVal.push_back(element.first);
-	}
-	return retVal;
+std::vector<std::string> Dataframe::column_names() {
+	return header;
 }
 
-std::vector< std::pair<std::string, std::string> > Dataframe::rowAtIndex(int rowIndex) {
-	std::vector< std::pair<std::string, std::string> > retVal;
-	//NEED TO CHECK IF rowIndex is valid
+std::vector< std::pair<std::string, std::string> > Dataframe::row_at_index(int row_index) {
+	if(row_index >= row_count) { 
+		//return empty vector
+		return std::vector< std::pair<std::string, std::string> >();
+	}	
+
+	std::vector< std::pair<std::string, std::string> > ret_val;
     for(auto & element : data) {
-		retVal.push_back(std::make_pair(element.first, element.second[rowIndex]));
+		ret_val.push_back(std::make_pair(element.first, element.second[row_index]));
 	}
-	return retVal;
+	return ret_val;
 }
 
-std::vector<std::string> Dataframe::getColumn(std::string columnName) {
-	return data[columnName];
+std::vector<std::string> Dataframe::get_column(std::string column_name) {
+	return data[column_name];
 }
 
-void Dataframe::print(){
-    std::vector<std::string> columns = columnNames();
+void Dataframe::print() {
+    std::vector<std::string> columns = column_names();
     
-    if(!columns.size()) std::cout<<"Dataframe is empty\n";
+    if(!column_count) std::cout << "Dataframe is empty\n";
     
-    std::cout<<columns[0];
-    for(int i = 1; i < columns.size(); i++){
-        std::cout<<',' <<columns[i];
+    for(size_t i = 0; i < column_count; i++){
+        std::cout << columns[i] << " ,"[i != column_count - 1] << " \n"[i == column_count - 1];
+		//Explanation of the above: " \n" is a char*, " \n"[0] is ' ' and " \n"[1] is '\n'
     }
-    std::cout<<std::endl;
     
-    for(int i = 0; i < data[columns[0]].size(); i++){
-        std::cout<<data[columns[0]][i];
-        for(int j = 1; j < columns.size(); j++){
-            std::cout<<',' <<data[columns[j]][i];
+    for(size_t row = 0; row < row_count; row++) {
+        for(size_t col = 0; col < column_count; col++){
+			std::cout << data[columns[col]][row] << " ,"[col != column_count - 1] << " \n"[col == column_count - 1];
         }
-        std::cout<<std::endl;
     }
 }
