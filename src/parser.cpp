@@ -5,7 +5,7 @@ std::vector<std::string> Parser::parse_csv_line(std::string line) {
 	std::stringstream lineStream(line);
 	std::string cell;
 
-	while(std::getline(lineStream,cell, ',')) {
+	while(std::getline(lineStream, cell, ',')) {
 		// Remove any whitespaces in values or column names, then delete extra character
 		cell.erase(remove_if(cell.begin(), cell.end(), isspace), cell.end()); 
 		result.push_back(cell);
