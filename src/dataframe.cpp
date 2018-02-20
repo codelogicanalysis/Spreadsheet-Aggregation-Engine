@@ -48,6 +48,14 @@ std::vector<std::string> Dataframe::get_column(std::string column_name) {
 	return data[column_name];
 }
 
+std::vector<std::string> Dataframe::operator[](std::string column_name) {
+    return data[column_name];
+}
+
+std::vector<std::string> Dataframe::operator[](int i) {
+    return data[header[i]];
+}
+
 void Dataframe::print() {
 	std::vector<std::string> columns = column_names();
     	

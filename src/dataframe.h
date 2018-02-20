@@ -17,6 +17,8 @@ public:
 	std::vector< std::pair<std::string, std::string> > row_at_index(int row_index);
 	std::vector<std::string> get_column(std::string column_name);
 	std::vector<std::string> column_types();
-	Dataframe transpose();
+    std::vector<std::string> operator[](std::string column_name);
+    std::vector<std::string> operator[](int i);
+    Dataframe transpose();
 	void print();
 };
