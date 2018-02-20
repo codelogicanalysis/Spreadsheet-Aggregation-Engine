@@ -38,7 +38,7 @@ std::vector< std::pair<std::string, std::string> > Dataframe::row_at_index(int r
 	}	
 
 	std::vector< std::pair<std::string, std::string> > ret_val;
-    for(auto & element : data) {
+	for(auto & element : data) {
 		ret_val.push_back(std::make_pair(element.first, element.second[row_index]));
 	}
 	return ret_val;
