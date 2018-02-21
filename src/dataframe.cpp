@@ -1,8 +1,7 @@
 #include "dataframe.h"
 
-//PRECONDITIONS:
-//1 - DATA IS A SQUARE MATRIX
-Dataframe::Dataframe(std::string filename) {
+
+DataFrame::DataFrame(std::string filename) {
 	std::ifstream file(filename);
 	if (!file) throw std::runtime_error("File '"+filename+"' did not open successfully. Check the relative file path or file contents.");
 	
@@ -27,11 +26,23 @@ Dataframe::Dataframe(std::string filename) {
 	row_count = data[header_line[0]].size();
 }
 
-std::vector<std::string> Dataframe::column_names() {
+/**
+ * @brief Returns column names in the current DataFrame
+ * @return Vector of strings containing the column names
+ */
+std::vector<std::string> DataFrame::column_names() {
 	return header;
 }
 
-std::vector< std::pair<std::string, std::string> > Dataframe::row_at_index(int row_index) {
+
+/**
+ * @brief      Returns row by index
+ *
+ * @param  row_index  The row index
+ *
+ * @return     Vector of pairs of strings
+ */
+std::vector< std::pair<std::string, std::string> > DataFrame::row_at_index(int row_index) {
 	if(row_index >= row_count) { 
 		//return empty vector
 		return std::vector< std::pair<std::string, std::string> >();
@@ -44,22 +55,23 @@ std::vector< std::pair<std::string, std::string> > Dataframe::row_at_index(int r
 	return ret_val;
 }
 
-std::vector<std::string> Dataframe::get_column(std::string column_name) {
+
+std::vector<std::string> DataFrame::get_column(std::string column_name) {
 	return data[column_name];
 }
 
-std::vector<std::string> Dataframe::operator[](std::string column_name) {
+std::vector<std::string> DataFrame::operator[](std::string column_name) {
     return data[column_name];
 }
 
-std::vector<std::string> Dataframe::operator[](int i) {
+std::vector<std::string> DataFrame::operator[](int i) {
     return data[header[i]];
 }
 
-void Dataframe::print() {
+void DataFrame::print() {
 	std::vector<std::string> columns = column_names();
     	
-	if(!column_count) std::cout << "Dataframe is empty\n";
+	if(!column_count) std::cout << "DataFrame is empty\n";
     
 	for(size_t i = 0; i < column_count; i++){	
 		std::cout << columns[i] << " ,"[i != column_count - 1] << " \n"[i == column_count - 1];

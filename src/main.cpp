@@ -2,7 +2,7 @@
 
 int main(){
 
-	Dataframe df("tests/test.csv");
+	DataFrame df("tests/test.csv");
 
     df.print();
 
