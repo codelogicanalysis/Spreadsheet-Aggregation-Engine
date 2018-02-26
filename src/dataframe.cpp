@@ -67,20 +67,20 @@ std::vector<std::string> DataFrame::operator[](std::string column_name) {
 std::vector<std::string> DataFrame::operator[](int i) {
 	return data[header[i]];
 }
-
-void DataFrame::print() {
+// df.print(cout); stringstream ss; df.print(ss); ofstream ofs("text.txt"); df.print(ofs); 
+void DataFrame::print(ostream & os) {
 	std::vector<std::string> columns = column_names();
     	
-	if(!column_count) std::cout << "DataFrame is empty\n";
+	if(!column_count) os << "DataFrame is empty\n";
     
 	for(size_t i = 0; i < column_count; i++){	
-		std::cout << columns[i] << " ,"[i != column_count - 1] << " \n"[i == column_count - 1];
+		os << columns[i] << " ,"[i != column_count - 1] << " \n"[i == column_count - 1];
 		//Explanation of the above: " \n" is a char*, " \n"[0] is ' ' and " \n"[1] is '\n'
 	}
     
 	for(size_t row = 0; row < row_count; row++) {
 		for(size_t col = 0; col < column_count; col++){
-			std::cout << data[columns[col]][row] << " ,"[col != column_count - 1] << " \n"[col == column_count - 1];
+			os << data[columns[col]][row] << " ,"[col != column_count - 1] << " \n"[col == column_count - 1];
 		}
 	}
 }
