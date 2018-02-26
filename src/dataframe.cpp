@@ -61,11 +61,11 @@ std::vector<std::string> DataFrame::get_column(std::string column_name) {
 }
 
 std::vector<std::string> DataFrame::operator[](std::string column_name) {
-    return data[column_name];
+	return data[column_name];
 }
 
 std::vector<std::string> DataFrame::operator[](int i) {
-    return data[header[i]];
+	return data[header[i]];
 }
 
 void DataFrame::print() {
